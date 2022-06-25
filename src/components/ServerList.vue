@@ -14,9 +14,9 @@
 					</v-col>
 				</v-row>
 				<v-row>
-					<v-col cols="8">
-						<div class="d-flex">
-							<div class="d-inline-block">
+					<v-col cols="12" sm="8">
+						<div class="d-sm-flex">
+							<div class="d-block d-sm-inline-block pe-5">
 								<v-checkbox
 									v-model="filter.hide.empty"
 									label="Hide Empty"
@@ -24,7 +24,7 @@
 									hide-details
 								></v-checkbox>
 							</div>
-							<div class="d-inline-block ps-5">
+							<div class="d-block d-sm-inline-block pe-5">
 								<v-checkbox
 									v-model="filter.hide.full"
 									label="Hide Full"
@@ -32,7 +32,7 @@
 									hide-details
 								></v-checkbox>
 							</div>
-							<div class="d-inline-block ps-5">
+							<div class="d-block d-sm-inline-block pe-5">
 								<v-checkbox
 									v-model="filter.hide.protected"
 									label="Hide Protected"
@@ -40,7 +40,7 @@
 									hide-details
 								></v-checkbox>
 							</div>
-							<div class="d-inline-block ps-5">
+							<div class="d-block d-sm-inline-block">
 								<v-checkbox
 									v-model="filter.hide.legacy"
 									label="Hide Legacy"
@@ -50,7 +50,7 @@
 							</div>
 						</div>
 					</v-col>
-					<v-col cols="4">
+					<v-col cols="12" sm="4">
 						<v-text-field
 							label="Search"
 							prepend-inner-icon="mdi-magnify"
