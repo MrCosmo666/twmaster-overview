@@ -67,12 +67,16 @@
 						<v-table>
 							<thead>
 								<tr>
-									<th class="text-left">
+									<th class="text-left" @click="changeSort('name')">
 										Server name
+										<v-icon v-if="sort.type === 'name' && sort.desc">mdi-chevron-down</v-icon>
+										<v-icon v-else-if="sort.type === 'name' && !sort.desc">mdi-chevron-up</v-icon>
 									</th>
 									<th class="text-left"></th>
-									<th class="text-left">
+									<th class="text-left" @click="changeSort('clients')">
 										Clients
+										<v-icon v-if="sort.type === 'clients' && sort.desc">mdi-chevron-down</v-icon>
+										<v-icon v-else-if="sort.type === 'clients' && !sort.desc">mdi-chevron-up</v-icon>
 									</th>
 									<th class="text-left">
 										Map
@@ -142,6 +146,10 @@ export default {
 				legacy: false
 			},
 			search: ''
+		},
+		sort: {
+			type: 'clients',
+			desc: true
 		}
   	}),
 	methods: {
@@ -161,11 +169,25 @@ export default {
 			} catch (e) {
 				console.error(e);
 			}
+		},
+		changeSort(type) {
+			// at the current state, Vuetify 3 doesn't have data tables yet :c
+			let desc = false;
+			if(this.sort.type === type) {
+				desc = !this.sort.desc;
+			}
+
+			this.sort.type = type;
+			this.sort.desc = desc;
+
+			console.log(`${this.sort.type} -- ${this.sort.desc}`);
 		}
 	},
 	computed: {
 		serverList() {
 			const servers = [];
+
+			// filter
 			for(const server of this.servers) {
 				if(this.filter.hide.empty && server.players.length <= 0) {
 					continue;
@@ -195,6 +217,27 @@ export default {
 				}
 
 				servers.push(server);
+			}
+
+			// sort
+			if(this.sort.type === 'name') {
+				servers.sort((a, b) => {
+					const textA = a.name.toLowerCase();
+					const textB = b.name.toLowerCase();
+					return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+				});
+
+				if(this.sort.desc) {
+					servers.reverse();
+				}
+			} else if (this.sort.type === 'clients') {
+				servers.sort((a, b) => {
+					return a.num_clients - b.num_clients;
+				});
+
+				if(this.sort.desc) {
+					servers.reverse();
+				}
 			}
 			return servers;
 		},
