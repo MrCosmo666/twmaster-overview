@@ -1,23 +1,18 @@
 <template>
-  <v-app>
-    <v-main>
-      <HelloWorld/>
-    </v-main>
-  </v-app>
+  	<v-app>
+    	<v-main>
+      		<ServerList />
+    	</v-main>
+  	</v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import ServerList from './components/ServerList.vue'
 
 export default {
-  name: 'App',
-
-  components: {
-    HelloWorld,
-  },
-
-  data: () => ({
-    //
-  }),
+  	name: 'App',
+  	components: {
+  		ServerList,
+  	},
 }
 </script>
