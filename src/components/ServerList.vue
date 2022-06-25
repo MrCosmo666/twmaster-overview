@@ -1,6 +1,12 @@
 <template>
+	<v-row class="px-5 py-2">
+		<v-col class="text-right text-primary-darken-5">
+			<v-icon size="small">mdi-sync</v-icon>
+			{{ lastUpdate.format('h:mm:ss a') }}
+		</v-col>
+	</v-row>
 	<v-container>
-		<v-row class="my-5">
+		<v-row class="mb-5">
 			<v-col class="text-center">
 				<p class="text-h5 ls-1 my-2">Hosting <span class="bg-primary rounded px-1" id="stats-servers">{{ numServers }}</span> servers with <span class="bg-primary rounded px-1" id="stats-players">{{ numPlayers }}</span> players</p>
 			</v-col>
@@ -117,13 +123,15 @@
 </template>
 
 <script>
-import axios from 'redaxios';
+import axios from 'redaxios'
+import moment from 'moment';
 import qs from 'qs';
 
 export default {
   	name: 'ServerList',
   	data: () => ({
   		servers: [],
+		lastUpdate: moment(),
 		master: import.meta.env.VITE_MASTER,
 		filter: {
 			hide: {
@@ -152,6 +160,7 @@ export default {
 
 				if(response && response.data && response.data.servers) {
 					this.servers = response.data.servers;
+					this.lastUpdate = moment();
 				}
 			} catch (e) {
 				console.error(e);
