@@ -59,6 +59,8 @@
 							hide-details
 							density="compact"
 							v-model="filter.search"
+							clearable
+							@click:clear="this.filter.search = ''"
 						></v-text-field>
 					</v-col>
 				</v-row>
