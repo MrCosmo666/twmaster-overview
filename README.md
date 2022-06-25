@@ -6,8 +6,9 @@ The corresponding data is provided by api.status.tw.
 ## Setup
 Create an .env file and add the values as described
 ```dotenv
-VITE_MASTER=masterX.teeworlds.com       # hostname of the masterserver
-VITE_HOSTER=status.tw                   # hoster of this masterserver
+VITE_MASTER=masterX.teeworlds.com               # hostname of the masterserver
+VITE_HOSTER_NAME=status.tw                      # name of the hoster of this masterserver
+VITE_HOSTER_URL=https://status.tw               # url to the website/server of the hoster
 ```
 
 ## Run

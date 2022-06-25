@@ -6,5 +6,13 @@
     letter-spacing: 1px !important;
 }
 
-.v-main {
+a {
+    color: rgba(var(--v-theme-primary-darken-2));
+    text-decoration: none;
+
+    &:hover,
+    &:focus,
+    &:active {
+        color: rgba(var(--v-theme-primary));
+    }
 }
