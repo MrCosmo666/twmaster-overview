@@ -166,8 +166,6 @@ export default {
 
 			this.sort.type = type;
 			this.sort.desc = desc;
-
-			console.log(`${this.sort.type} -- ${this.sort.desc}`);
 		}
 	},
 	computed: {
@@ -241,6 +239,7 @@ export default {
 	},
 	mounted() {
 	  	this.requestServerList();
+		setInterval(this.requestServerList, 10 * 1000);
 	}
 }
 </script>
