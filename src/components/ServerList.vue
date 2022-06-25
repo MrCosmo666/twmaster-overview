@@ -1,132 +1,119 @@
 <template>
-	<v-layout>
-		<v-app-bar color="secondary-lighten-1">
-			<v-app-bar-title class="text-uppercase ls-1">{{ master }}</v-app-bar-title>
-			<template v-slot:append>
-				<a class="text-uppercase ls-1" href="https://status.tw">Statistics by status.tw</a>
-			</template>
-		</v-app-bar>
-		<v-main class="bg-secondary">
-			<v-container>
-				<v-row class="my-5">
-					<v-col class="text-center">
-						<p class="text-h5 ls-1 my-2">Hosting <span class="bg-primary rounded px-1" id="stats-servers">{{ numServers }}</span> servers with <span class="bg-primary rounded px-1" id="stats-players">{{ numPlayers }}</span> players</p>
-					</v-col>
-				</v-row>
-				<v-row>
-					<v-col cols="12" sm="8">
-						<div class="d-sm-flex">
-							<div class="d-block d-sm-inline-block pe-5">
-								<v-checkbox
-									v-model="filter.hide.empty"
-									label="Hide Empty"
-									density="compact"
-									hide-details
-								></v-checkbox>
-							</div>
-							<div class="d-block d-sm-inline-block pe-5">
-								<v-checkbox
-									v-model="filter.hide.full"
-									label="Hide Full"
-									density="compact"
-									hide-details
-								></v-checkbox>
-							</div>
-							<div class="d-block d-sm-inline-block pe-5">
-								<v-checkbox
-									v-model="filter.hide.protected"
-									label="Hide Protected"
-									density="compact"
-									hide-details
-								></v-checkbox>
-							</div>
-							<div class="d-block d-sm-inline-block">
-								<v-checkbox
-									v-model="filter.hide.legacy"
-									label="Hide Legacy"
-									density="compact"
-									hide-details
-								></v-checkbox>
-							</div>
-						</div>
-					</v-col>
-					<v-col cols="12" sm="4">
-						<v-text-field
-							label="Search"
-							prepend-inner-icon="mdi-magnify"
-							variant="solo"
-							bg-color="secondary-lighten-1"
-							hide-details
+	<v-container>
+		<v-row class="my-5">
+			<v-col class="text-center">
+				<p class="text-h5 ls-1 my-2">Hosting <span class="bg-primary rounded px-1" id="stats-servers">{{ numServers }}</span> servers with <span class="bg-primary rounded px-1" id="stats-players">{{ numPlayers }}</span> players</p>
+			</v-col>
+		</v-row>
+		<v-row>
+			<v-col cols="12" sm="8">
+				<div class="d-sm-flex">
+					<div class="d-block d-sm-inline-block pe-5">
+						<v-checkbox
+							v-model="filter.hide.empty"
+							label="Hide Empty"
 							density="compact"
-							v-model="filter.search"
-							clearable
-							@click:clear="this.filter.search = ''"
-						></v-text-field>
-					</v-col>
-				</v-row>
-				<v-row class="mb-5">
-					<v-col>
-						<v-table>
-							<thead>
-								<tr>
-									<th class="text-left" @click="changeSort('name')">
-										Server name
-										<v-icon v-if="sort.type === 'name' && sort.desc">mdi-chevron-down</v-icon>
-										<v-icon v-else-if="sort.type === 'name' && !sort.desc">mdi-chevron-up</v-icon>
-									</th>
-									<th class="text-left"></th>
-									<th class="text-left" @click="changeSort('clients')">
-										Clients
-										<v-icon v-if="sort.type === 'clients' && sort.desc">mdi-chevron-down</v-icon>
-										<v-icon v-else-if="sort.type === 'clients' && !sort.desc">mdi-chevron-up</v-icon>
-									</th>
-									<th class="text-left">
-										Map
-									</th>
-									<th class="text-left">
-										Gamemode
-									</th>
-									<th class="text-left">
-										Version
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-							<tr
-								v-for="server in serverList"
-								:key="server.server_pk"
-							>
-								<td>{{ server.name }}</td>
-								<td>
-									<v-tooltip
-										v-if="server.password"
-										location="top"
-									>
-										<template v-slot:activator="{ props }">
-											<v-icon v-bind="props">mdi-lock</v-icon>
-										</template>
-										<span>Password protected</span>
-									</v-tooltip>
-								</td>
-								<td><span class="font-weight-bold">{{ server.num_clients }}</span> / {{ server.max_clients }}</td>
-								<td>{{ server.map_name }}</td>
-								<td>{{ server.gamemode_name }}</td>
-								<td>{{ server.version }}</td>
-							</tr>
-							</tbody>
-						</v-table>
-					</v-col>
-				</v-row>
-			</v-container>
-		</v-main>
-		<v-footer
-			app
-			class="bg-secondary-lighten-1 text-center d-flex flex-column"
-		>
-			<p class="text-h6 mt-3">{{ master }}</p>
-			<a class="mb-3" :href="hosterUrl">Hosted by {{ hosterName }}</a>
-		</v-footer>
-	</v-layout>
+							hide-details
+						></v-checkbox>
+					</div>
+					<div class="d-block d-sm-inline-block pe-5">
+						<v-checkbox
+							v-model="filter.hide.full"
+							label="Hide Full"
+							density="compact"
+							hide-details
+						></v-checkbox>
+					</div>
+					<div class="d-block d-sm-inline-block pe-5">
+						<v-checkbox
+							v-model="filter.hide.protected"
+							label="Hide Protected"
+							density="compact"
+							hide-details
+						></v-checkbox>
+					</div>
+					<div class="d-block d-sm-inline-block">
+						<v-checkbox
+							v-model="filter.hide.legacy"
+							label="Hide Legacy"
+							density="compact"
+							hide-details
+						></v-checkbox>
+					</div>
+				</div>
+			</v-col>
+			<v-col cols="12" sm="4">
+				<v-text-field
+					label="Search"
+					prepend-inner-icon="mdi-magnify"
+					variant="solo"
+					bg-color="secondary-lighten-1"
+					hide-details
+					density="compact"
+					v-model="filter.search"
+					clearable
+					@click:clear="this.filter.search = ''"
+				></v-text-field>
+			</v-col>
+		</v-row>
+		<v-row class="mb-5">
+			<v-col>
+				<v-table>
+					<thead>
+						<tr>
+							<th class="text-left" @click="changeSort('name')">
+								Server name
+								<v-icon v-if="sort.type === 'name' && sort.desc">mdi-chevron-down</v-icon>
+								<v-icon v-else-if="sort.type === 'name' && !sort.desc">mdi-chevron-up</v-icon>
+							</th>
+							<th class="text-left"></th>
+							<th class="text-left" @click="changeSort('clients')">
+								Clients
+								<v-icon v-if="sort.type === 'clients' && sort.desc">mdi-chevron-down</v-icon>
+								<v-icon v-else-if="sort.type === 'clients' && !sort.desc">mdi-chevron-up</v-icon>
+							</th>
+							<th class="text-left">
+								Map
+							</th>
+							<th class="text-left">
+								Gamemode
+							</th>
+							<th class="text-left">
+								Version
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							v-if="serverList.length > 0"
+							v-for="server in serverList"
+							:key="server.server_pk"
+						>
+							<td>{{ server.name }}</td>
+							<td>
+								<v-tooltip
+									v-if="server.password"
+									location="top"
+								>
+									<template v-slot:activator="{ props }">
+										<v-icon v-bind="props">mdi-lock</v-icon>
+									</template>
+									<span>Password protected</span>
+								</v-tooltip>
+							</td>
+							<td><span class="font-weight-bold">{{ server.num_clients }}</span> / {{ server.max_clients }}</td>
+							<td>{{ server.map_name }}</td>
+							<td>{{ server.gamemode_name }}</td>
+							<td>{{ server.version }}</td>
+						</tr>
+						<tr v-else class="text-center">
+							<td colspan="6">No servers found</td>
+						</tr>
+					</tbody>
+				</v-table>
+			</v-col>
+		</v-row>
+	</v-container>
 </template>
 
 <script>
@@ -138,8 +125,6 @@ export default {
   	data: () => ({
   		servers: [],
 		master: import.meta.env.VITE_MASTER,
-		hosterName: import.meta.env.VITE_HOSTER_NAME,
-		hosterUrl: import.meta.env.VITE_HOSTER_URL,
 		filter: {
 			hide: {
 				empty: false,
