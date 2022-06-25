@@ -1,17 +1,61 @@
 <template>
 	<v-layout>
 		<v-app-bar color="secondary-lighten-1">
-			<v-app-bar-title class="text-uppercase ls-1">{{ master.split('.')[0] }} - Overview</v-app-bar-title>
+			<v-app-bar-title class="text-uppercase ls-1">{{ master }}</v-app-bar-title>
 			<template v-slot:append>
 				<a class="text-uppercase ls-1" href="https://status.tw">Statistics by status.tw</a>
 			</template>
 		</v-app-bar>
 		<v-main class="bg-secondary">
 			<v-container>
-				<v-row class="mt-5">
+				<v-row class="my-5">
 					<v-col class="text-center">
-						<p class="text-h4 ls-1 my-2">{{ master }}</p>
 						<p class="text-h5 ls-1 my-2">Hosting <span class="bg-primary rounded px-1" id="stats-servers">{{ numServers }}</span> servers with <span class="bg-primary rounded px-1" id="stats-players">{{ numPlayers }}</span> players</p>
+					</v-col>
+				</v-row>
+				<v-row>
+					<v-col>
+						<v-table>
+							<thead>
+								<tr>
+									<th class="text-left">
+										Server name
+									</th>
+									<th class="text-left"></th>
+									<th class="text-left">
+										Clients
+									</th>
+									<th class="text-left">
+										Map
+									</th>
+									<th class="text-left">
+										Gamemode
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+							<tr
+								v-for="server in serverList"
+								:key="server.server_pk"
+							>
+								<td>{{ server.name }}</td>
+								<td>
+									<v-tooltip
+										v-if="server.password"
+										location="top"
+									>
+										<template v-slot:activator="{ props }">
+											<v-icon v-bind="props">mdi-lock</v-icon>
+										</template>
+										<span>Password protected</span>
+									</v-tooltip>
+								</td>
+								<td><span class="font-weight-bold">{{ server.num_clients }}</span> / {{ server.max_clients }}</td>
+								<td>{{ server.map_name }}</td>
+								<td>{{ server.gamemode_name }}</td>
+							</tr>
+							</tbody>
+						</v-table>
 					</v-col>
 				</v-row>
 			</v-container>
@@ -58,6 +102,9 @@ export default {
 		}
 	},
 	computed: {
+		serverList() {
+			return this.servers;
+		},
 		numServers() {
 			return this.servers.length;
 		},

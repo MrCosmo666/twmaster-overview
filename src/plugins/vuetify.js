@@ -18,13 +18,15 @@ export default createVuetify({
             dark: {
                 colors: {
                     primary: '#eeeeee',
-                    secondary: '#191919'
+                    secondary: '#191919',
+                    surface: '#191919'
                 }
             },
             light: {
                 colors: {
                     primary: '#212121',
-                    secondary: '#eeeeee'
+                    secondary: '#eeeeee',
+                    surface: '#eeeeee'
                 }
             }
         }

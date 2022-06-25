@@ -16,3 +16,23 @@ a {
         color: rgba(var(--v-theme-primary));
     }
 }
+
+.v-table {
+    border: 2px solid rgba(var(--v-theme-secondary-lighten-1));
+
+    thead {
+        background: rgba(var(--v-theme-secondary-lighten-1));
+
+        th {
+            font-size: 15px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+    }
+
+    td {
+        border-color: rgba(var(--v-theme-secondary-lighten-1)) !important;
+        letter-spacing: 1.1px;
+        font-size: 15px;
+    }
+}
