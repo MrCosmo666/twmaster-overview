@@ -4,7 +4,11 @@ Simple overview page to run as a website on the masterserver to show servers hos
 The corresponding data is provided by api.status.tw.
 
 ## Setup
-todo
+Create an .env file and add the values as described
+```dotenv
+VITE_MASTER=masterX.teeworlds.com       # hostname of the masterserver
+VITE_HOSTER=status.tw                   # hoster of this masterserver
+```
 
 ## Run
 ### Run preview

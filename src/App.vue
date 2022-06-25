@@ -1,8 +1,6 @@
 <template>
   	<v-app>
-    	<v-main>
-      		<ServerList />
-    	</v-main>
+		<ServerList />
   	</v-app>
 </template>
 
