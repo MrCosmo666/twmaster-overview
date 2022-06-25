@@ -239,7 +239,7 @@ export default {
 	},
 	mounted() {
 	  	this.requestServerList();
-		setInterval(this.requestServerList, 10 * 1000);
+		setInterval(this.requestServerList, 60 * 1000);
 	}
 }
 </script>
