@@ -14,6 +14,55 @@
 					</v-col>
 				</v-row>
 				<v-row>
+					<v-col cols="8">
+						<div class="d-flex">
+							<div class="d-inline-block">
+								<v-checkbox
+									v-model="filter.hide.empty"
+									label="Hide Empty"
+									density="compact"
+									hide-details
+								></v-checkbox>
+							</div>
+							<div class="d-inline-block ps-5">
+								<v-checkbox
+									v-model="filter.hide.full"
+									label="Hide Full"
+									density="compact"
+									hide-details
+								></v-checkbox>
+							</div>
+							<div class="d-inline-block ps-5">
+								<v-checkbox
+									v-model="filter.hide.protected"
+									label="Hide Protected"
+									density="compact"
+									hide-details
+								></v-checkbox>
+							</div>
+							<div class="d-inline-block ps-5">
+								<v-checkbox
+									v-model="filter.hide.legacy"
+									label="Hide Legacy"
+									density="compact"
+									hide-details
+								></v-checkbox>
+							</div>
+						</div>
+					</v-col>
+					<v-col cols="4">
+						<v-text-field
+							label="Search"
+							prepend-inner-icon="mdi-magnify"
+							variant="solo"
+							bg-color="secondary-lighten-1"
+							hide-details
+							density="compact"
+							v-model="filter.search"
+						></v-text-field>
+					</v-col>
+				</v-row>
+				<v-row class="mb-5">
 					<v-col>
 						<v-table>
 							<thead>
@@ -30,6 +79,9 @@
 									</th>
 									<th class="text-left">
 										Gamemode
+									</th>
+									<th class="text-left">
+										Version
 									</th>
 								</tr>
 							</thead>
@@ -53,6 +105,7 @@
 								<td><span class="font-weight-bold">{{ server.num_clients }}</span> / {{ server.max_clients }}</td>
 								<td>{{ server.map_name }}</td>
 								<td>{{ server.gamemode_name }}</td>
+								<td>{{ server.version }}</td>
 							</tr>
 							</tbody>
 						</v-table>
@@ -80,7 +133,16 @@ export default {
   		servers: [],
 		master: import.meta.env.VITE_MASTER,
 		hosterName: import.meta.env.VITE_HOSTER_NAME,
-		hosterUrl: import.meta.env.VITE_HOSTER_URL
+		hosterUrl: import.meta.env.VITE_HOSTER_URL,
+		filter: {
+			hide: {
+				empty: false,
+				full: false,
+				protected: false,
+				legacy: false
+			},
+			search: ''
+		}
   	}),
 	methods: {
 		async requestServerList() {
@@ -103,13 +165,44 @@ export default {
 	},
 	computed: {
 		serverList() {
-			return this.servers;
+			const servers = [];
+			for(const server of this.servers) {
+				if(this.filter.hide.empty && server.players.length <= 0) {
+					continue;
+				}
+
+				if(this.filter.hide.full && server.num_clients === server.max_clients) {
+					continue;
+				}
+
+				if(this.filter.hide.protected && server.password) {
+					continue;
+				}
+
+				if(this.filter.hide.legacy && server.tw_version.substring(0, 3) !== '0.7') {
+					continue;
+				}
+
+				if(this.filter.search && this.filter.search.length > 0) {
+					const search = this.filter.search.toLowerCase();
+					if(
+						!server.name.toLowerCase().includes(search)
+						&& !server.map_name.toLowerCase().includes(search)
+						&& !server.gamemode_name.toLowerCase().includes(search)
+					) {
+						continue;
+					}
+				}
+
+				servers.push(server);
+			}
+			return servers;
 		},
 		numServers() {
-			return this.servers.length;
+			return this.serverList.length;
 		},
 		playerList() {
-			const playersOfServers = this.servers.map(x => x.players);
+			const playersOfServers = this.serverList.map(x => x.players);
 			return playersOfServers.flat();
 		},
 		numPlayers() {
