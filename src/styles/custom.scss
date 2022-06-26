@@ -36,9 +36,68 @@ a {
         }
     }
 
-    td {
-        border-color: rgba(var(--v-theme-secondary-lighten-1)) !important;
-        letter-spacing: 1.1px;
-        font-size: 15px;
+    tr {
+        cursor: pointer;
+
+        td {
+            border-color: rgba(var(--v-theme-secondary-lighten-1)) !important;
+            letter-spacing: 1.1px;
+            font-size: 15px;
+        }
     }
+}
+
+.v-dialog {
+    .v-overlay__content {
+        width: 100%;
+        height: 100%;
+
+        .server-info-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 1rem 5px;
+
+            tbody {
+                width: 100%;
+
+                tr {
+                    width: 100%;
+                    td:first-child {
+                        width: 20%;
+                        text-align: right;
+                        color: rgba(var(--v-theme-primary-darken-3));
+                        text-transform: uppercase;
+                    }
+
+                    td:last-child {
+                        width: 80%;
+                    }
+                }
+            }
+        }
+
+        .connect-button {
+            border: 2px solid rgba(var(--v-theme-secondary-lighten-1));
+        }
+    }
+}
+
+/* scrollbar */
+/* The emerging W3C standard that is currently Firefox-only */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--v-theme-secondary-lighten-1)) rgba(var(--v-theme-secondary));
+}
+
+/* Works on Chrome/Edge/Safari */
+*::-webkit-scrollbar {
+    width: 12px;
+}
+*::-webkit-scrollbar-track {
+    background: 0 0;
+}
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--v-theme-secondary-lighten-1));
+    border-radius: 20px;
+    border: 3px solid rgba(var(--v-theme-secondary));
 }

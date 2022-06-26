@@ -94,6 +94,7 @@
 							v-if="serverList.length > 0"
 							v-for="server in serverList"
 							:key="server.server_pk"
+							@click="openServerInfo(server.server_pk)"
 						>
 							<td>{{ server.name }}</td>
 							<td>
@@ -120,15 +121,20 @@
 			</v-col>
 		</v-row>
 	</v-container>
+	<ServerInfoDialog v-if="serverDetails.serverData" :is-active="serverDetails.isActive" :server-data="serverDetails.serverData" @close="closeServerInfo" />
 </template>
 
 <script>
 import axios from 'redaxios'
 import moment from 'moment';
 import qs from 'qs';
+import ServerInfoDialog from './ServerInfoDialog.vue';
 
 export default {
   	name: 'ServerList',
+	components: {
+		ServerInfoDialog
+	},
   	data: () => ({
   		servers: [],
 		lastUpdate: moment(),
@@ -145,6 +151,10 @@ export default {
 		sort: {
 			type: 'clients',
 			desc: true
+		},
+		serverDetails: {
+			isActive: false,
+			serverData: null
 		}
   	}),
 	methods: {
@@ -175,6 +185,17 @@ export default {
 
 			this.sort.type = type;
 			this.sort.desc = desc;
+		},
+		openServerInfo(serverId) {
+			const server = this.servers.find(x => x.server_pk === serverId);
+			if(server) {
+				this.serverDetails.serverData = server;
+				this.serverDetails.isActive = true;
+			}
+		},
+		closeServerInfo() {
+			this.serverDetails.serverData = null;
+			this.serverDetails.isActive = false;
 		}
 	},
 	computed: {
