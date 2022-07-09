@@ -24,15 +24,15 @@
 									</tr>
 									<tr>
 										<td>Address</td>
-										<td>{{ serverData.server_ip }}:{{ serverData.server_port }}</td>
+										<td>{{ serverData.ip }}:{{ serverData.port }}</td>
 									</tr>
 									<tr>
 										<td>Gamemode</td>
-										<td>{{ serverData.gamemode_name }}</td>
+										<td>{{ serverData.gametype }}</td>
 									</tr>
 									<tr>
 										<td>Map name</td>
-										<td>{{ serverData.map_name }}</td>
+										<td>{{ serverData.map }}</td>
 									</tr>
 									<tr>
 										<td>Password</td>
@@ -40,7 +40,7 @@
 									</tr>
 									<tr>
 										<td>Version</td>
-										<td>{{ serverData.version }} ({{ serverData.tw_version }})</td>
+										<td>{{ serverData.version }}</td>
 									</tr>
 									</tbody>
 								</table>
@@ -48,7 +48,7 @@
 						</v-row>
 						<v-row class="mt-6">
 							<v-col class="text-center">
-								<v-btn class="connect-button" :href="`steam://run/380840//teeworlds:${serverData.server_ip}:${serverData.server_port}/`" block>Connect</v-btn>
+								<v-btn class="connect-button" :href="`steam://run/380840//teeworlds:${serverData.ip}:${serverData.port}/`" block>Connect</v-btn>
 							</v-col>
 						</v-row>
 					</v-col>
@@ -61,12 +61,12 @@
 							</thead>
 							<tbody>
 								<tr
-									v-if="serverData.players.length > 0"
-									v-for="player in serverData.players"
+									v-if="serverData.clients.length > 0"
+									v-for="player in serverData.clients"
 									:key="player.name"
 								>
 									<td>{{ player.name }}</td>
-									<td>{{ player.clan_name }}</td>
+									<td>{{ player.clan }}</td>
 									<td>{{ player.score }}</td>
 								</tr>
 								<tr v-else class="text-center">

@@ -93,8 +93,8 @@
 						<tr
 							v-if="serverList.length > 0"
 							v-for="server in serverList"
-							:key="server.server_pk"
-							@click="openServerInfo(server.server_pk)"
+							:key="server.server_id"
+							@click="openServerInfo(server.server_id)"
 						>
 							<td>{{ server.name }}</td>
 							<td>
@@ -109,8 +109,8 @@
 								</v-tooltip>
 							</td>
 							<td><span class="font-weight-bold">{{ server.num_clients }}</span> / {{ server.max_clients }}</td>
-							<td>{{ server.map_name }}</td>
-							<td>{{ server.gamemode_name }}</td>
+							<td>{{ server.map }}</td>
+							<td>{{ server.gametype }}</td>
 							<td>{{ server.version }}</td>
 						</tr>
 						<tr v-else class="text-center">
@@ -160,16 +160,9 @@ export default {
 	methods: {
 		async requestServerList() {
 			try {
-				const response = await axios.post(`https://api.status.tw/2.0/master/server/list/`, qs.stringify({
-					master: import.meta.env.VITE_MASTER
-				}), {
-					headers: {
-						'content-type': 'application/x-www-form-urlencoded'
-					}
-				});
-
-				if(response && response.data && response.data.servers) {
-					this.servers = response.data.servers;
+				const response = await axios.get(`https://api.status.tw/master/server/list/${import.meta.env.VITE_MASTER}/`);
+				if(response && response.data && response.data) {
+					this.servers = response.data;
 					this.lastUpdate = moment();
 				}
 			} catch (e) {
@@ -187,7 +180,7 @@ export default {
 			this.sort.desc = desc;
 		},
 		openServerInfo(serverId) {
-			const server = this.servers.find(x => x.server_pk === serverId);
+			const server = this.servers.find(x => x.server_id === serverId);
 			if(server) {
 				this.serverDetails.serverData = server;
 				this.serverDetails.isActive = true;
@@ -204,7 +197,7 @@ export default {
 
 			// filter
 			for(const server of this.servers) {
-				if(this.filter.hide.empty && server.players.length <= 0) {
+				if(this.filter.hide.empty && server.clients.length <= 0) {
 					continue;
 				}
 
@@ -216,7 +209,7 @@ export default {
 					continue;
 				}
 
-				if(this.filter.hide.legacy && server.tw_version.substring(0, 3) !== '0.7') {
+				if(this.filter.hide.legacy && server.is_legacy) {
 					continue;
 				}
 
@@ -224,8 +217,8 @@ export default {
 					const search = this.filter.search.toLowerCase();
 					if(
 						!server.name.toLowerCase().includes(search)
-						&& !server.map_name.toLowerCase().includes(search)
-						&& !server.gamemode_name.toLowerCase().includes(search)
+						&& !server.map.toLowerCase().includes(search)
+						&& !server.gametype.toLowerCase().includes(search)
 					) {
 						continue;
 					}
@@ -260,7 +253,7 @@ export default {
 			return this.serverList.length;
 		},
 		playerList() {
-			const playersOfServers = this.serverList.map(x => x.players);
+			const playersOfServers = this.serverList.map(x => x.clients);
 			return playersOfServers.flat();
 		},
 		numPlayers() {
