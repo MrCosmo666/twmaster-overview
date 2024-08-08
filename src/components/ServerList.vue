@@ -99,7 +99,7 @@
 							<td>{{ server.name }}</td>
 							<td>
 								<v-tooltip
-									v-if="server.password"
+									v-if="server.hasPassword"
 									location="top"
 								>
 									<template v-slot:activator="{ props }">
@@ -108,10 +108,10 @@
 									<span>Password protected</span>
 								</v-tooltip>
 							</td>
-							<td><span class="font-weight-bold">{{ server.num_clients }}</span> / {{ server.max_clients }}</td>
-							<td>{{ server.map }}</td>
-							<td>{{ server.gametype }}</td>
-							<td>{{ server.version }}</td>
+							<td><span class="font-weight-bold">{{ server.numClients }}</span> / {{ server.maxClients }}</td>
+							<td>{{ server.map.name }}</td>
+							<td>{{ server.gameType.name }}</td>
+							<td>{{ server.version.version }}</td>
 						</tr>
 						<tr v-else class="text-center">
 							<td colspan="6">No servers found</td>
@@ -121,13 +121,17 @@
 			</v-col>
 		</v-row>
 	</v-container>
-	<ServerInfoDialog v-if="serverDetails.serverData" :is-active="serverDetails.isActive" :server-data="serverDetails.serverData" @close="closeServerInfo" />
+	<ServerInfoDialog
+		v-if="serverDetails.serverData"
+		v-model="serverDetails.isActive"
+		:server-data="serverDetails.serverData"
+		@close="closeServerInfo"
+	/>
 </template>
 
 <script>
 import axios from 'redaxios'
 import moment from 'moment';
-import qs from 'qs';
 import ServerInfoDialog from './ServerInfoDialog.vue';
 
 export default {
@@ -160,7 +164,7 @@ export default {
 	methods: {
 		async requestServerList() {
 			try {
-				const response = await axios.get(`https://api.status.tw/master/server/list/${import.meta.env.VITE_MASTER}/`);
+				const response = await axios.get(`https://api.status.tw/server/list/`);
 				if(response && response.data && response.data) {
 					this.servers = response.data;
 					this.lastUpdate = moment();
@@ -201,15 +205,15 @@ export default {
 					continue;
 				}
 
-				if(this.filter.hide.full && server.num_clients === server.max_clients) {
+				if(this.filter.hide.full && server.numClients === server.maxClients) {
 					continue;
 				}
 
-				if(this.filter.hide.protected && server.password) {
+				if(this.filter.hide.protected && server.hasPassword) {
 					continue;
 				}
 
-				if(this.filter.hide.legacy && server.is_legacy) {
+				if(this.filter.hide.legacy && server.supports6 && !server.supports7) {
 					continue;
 				}
 
@@ -217,8 +221,8 @@ export default {
 					const search = this.filter.search.toLowerCase();
 					if(
 						!server.name.toLowerCase().includes(search)
-						&& !server.map.toLowerCase().includes(search)
-						&& !server.gametype.toLowerCase().includes(search)
+						&& !server.map.name.toLowerCase().includes(search)
+						&& !server.gameType.name.toLowerCase().includes(search)
 					) {
 						continue;
 					}
@@ -240,7 +244,7 @@ export default {
 				}
 			} else if (this.sort.type === 'clients') {
 				servers.sort((a, b) => {
-					return a.num_clients - b.num_clients;
+					return a.numClients - b.numClients;
 				});
 
 				if(this.sort.desc) {

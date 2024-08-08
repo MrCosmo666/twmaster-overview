@@ -1,10 +1,12 @@
 # Teeworlds Masterserver Overview Page
 
-Simple overview page to run as a website on the masterserver to show servers hosted on it.  
+Simple overview page to run as a website on the masterserver to show all teeworlds servers.  
 The corresponding data is provided by api.status.tw.
 
+2024: Due to changes to the status.tw API and the lack of distribution of Teeworlds servers on the master servers, this page will now show all Teeworlds servers.
+
 ## Requirements
-- Node.js 16+
+- Node.js 20+
 
 ## Setup
 Create an .env file and add the values as described
@@ -17,20 +19,20 @@ VITE_HOSTER_URL=https://status.tw               # url to the website/server of t
 ## Run
 ### Install
 ```
-npm install
+pnpm install
 ```
 
 ### Run preview
 ```
-npm run preview
+pnpm run preview
 ```
 
 ### Run dev server
 ```
-npm run dev
+pnpm run dev
 ```
 
 ### Run production build
 ```
-npm run build
+pnpm run build
 ```

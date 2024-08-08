@@ -1,16 +1,14 @@
 <template>
 	<v-dialog
-		v-model="isActive"
+		:model-value="isActive"
 		width="70%"
 		height="400px"
-		@click:outside="close"
+		@update:model-value="$emit('update:modelValue', $event)"
 	>
 		<v-card height="100%">
-			<v-card-header>
-				<v-card-header-text>
-					<v-card-title class="font-weight-bold">{{ serverData.name }}</v-card-title>
-				</v-card-header-text>
-			</v-card-header>
+			<v-card-item>
+				<v-card-title class="font-weight-bold">{{ serverData.name }}</v-card-title>
+			</v-card-item>
 			<v-card-text>
 				<v-row>
 					<v-col cols="6">
@@ -20,7 +18,7 @@
 									<tbody>
 									<tr>
 										<td>Clients</td>
-										<td><span class="font-weight-bold">{{ serverData.num_clients }}</span> / {{ serverData.max_clients }}</td>
+										<td><span class="font-weight-bold">{{ serverData.numClients }}</span> / {{ serverData.maxClients }}</td>
 									</tr>
 									<tr>
 										<td>Address</td>
@@ -28,19 +26,19 @@
 									</tr>
 									<tr>
 										<td>Gamemode</td>
-										<td>{{ serverData.gametype }}</td>
+										<td>{{ serverData.gameType.name }}</td>
 									</tr>
 									<tr>
 										<td>Map name</td>
-										<td>{{ serverData.map }}</td>
+										<td>{{ serverData.map.name }}</td>
 									</tr>
 									<tr>
 										<td>Password</td>
-										<td>{{ serverData.password ? 'Protected' : 'None' }}</td>
+										<td>{{ serverData.hasPassword ? 'Protected' : 'None' }}</td>
 									</tr>
 									<tr>
 										<td>Version</td>
-										<td>{{ serverData.version }}</td>
+										<td>{{ serverData.version.version }}</td>
 									</tr>
 									</tbody>
 								</table>
@@ -66,7 +64,7 @@
 									:key="player.name"
 								>
 									<td>{{ player.name }}</td>
-									<td>{{ player.clan }}</td>
+									<td>{{ player.clan.name }}</td>
 									<td>{{ player.score }}</td>
 								</tr>
 								<tr v-else class="text-center">
